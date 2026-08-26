@@ -6,16 +6,12 @@ use crate::*;
 #[derive(Debug, PartialEq)]
 pub struct StubCipher;
 
-#[derive(Debug, thiserror::Error)]
-#[error("stub cipher error")]
-pub struct StubError;
-
 impl Cipher for StubCipher {
     const NAME: &'static str = "STUB";
 
     type NonceSize = U32;
     type AuthorizationTagSize = U32;
-    type Error = StubError;
+    type Error = Box<&'static (dyn std::error::Error + Send + Sync)>;
 
     fn encrypt(
         _nonce: &Nonce<Self::NonceSize>,
