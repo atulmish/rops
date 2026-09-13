@@ -12,10 +12,11 @@ exclude.workspace = true
 edition.workspace = true
 
 [features]
-default = ["age", "aws-kms", "yaml", "json", "toml", "aes-gcm", "sha2"]
+default = ["age", "aws-kms", "ssh", "yaml", "json", "toml", "aes-gcm", "sha2"]
 # Integrations:
 age = ["dep:age"]
 aws-kms = ["dep:aws-arn", "dep:aws-sdk-kms", "dep:tokio"]
+ssh = ["dep:ssh-key", "dep:curve25519-dalek", "dep:x25519-dalek"]
 # File formats:
 yaml = ["dep:serde_yaml"]
 json = ["dep:serde_json"]
@@ -68,6 +69,11 @@ aes-gcm = { workspace = true, optional = true }
 
 # SHA2
 sha2 = { workspace = true, optional = true }
+
+# SSH
+ssh-key = { workspace = true, optional = true }
+curve25519-dalek = { workspace = true, optional = true }
+x25519-dalek = { version = "2.0", optional = true }
 
 # TEST_UTILS
 pretty_assertions = { workspace = true, optional = true }

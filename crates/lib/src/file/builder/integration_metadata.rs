@@ -12,6 +12,8 @@ pub struct IntegrationMetadataBuilder {
     pub age_key_ids: Vec<<AgeIntegration as Integration>::KeyId>,
     #[cfg(feature = "aws-kms")]
     pub aws_kms_key_ids: Vec<<AwsKmsIntegration as Integration>::KeyId>,
+    #[cfg(feature = "ssh")]
+    pub ssh_key_ids: Vec<<SshIntegration as Integration>::KeyId>,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -32,6 +34,8 @@ impl IntegrationMetadataBuilder {
 
         #[cfg(feature = "age")]
         integration_metadata.add_keys::<AgeIntegration>(self.age_key_ids, data_key)?;
+        #[cfg(feature = "ssh")]
+        integration_metadata.add_keys::<SshIntegration>(self.ssh_key_ids, data_key)?;
         #[cfg(feature = "aws-kms")]
         integration_metadata.add_keys::<AwsKmsIntegration>(self.aws_kms_key_ids, data_key)?;
 
@@ -41,6 +45,11 @@ impl IntegrationMetadataBuilder {
     fn missing_keys(&self) -> bool {
         #[cfg(feature = "age")]
         if !self.age_key_ids.is_empty() {
+            return false;
+        }
+
+        #[cfg(feature = "ssh")]
+        if !self.ssh_key_ids.is_empty() {
             return false;
         }
 

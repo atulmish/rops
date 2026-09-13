@@ -12,6 +12,9 @@ pub struct IntegrationMetadata {
     #[cfg(feature = "age")]
     #[serde(skip_serializing_if = "IntegrationMetadataUnits::is_empty", default)]
     pub age: IntegrationMetadataUnits<AgeIntegration>,
+    #[cfg(feature = "ssh")]
+    #[serde(skip_serializing_if = "IntegrationMetadataUnits::is_empty", default)]
+    pub ssh: IntegrationMetadataUnits<SshIntegration>,
 }
 
 impl IntegrationMetadata {
@@ -40,6 +43,13 @@ impl IntegrationMetadata {
             return decrypt_result.map(Some);
         }
 
+        #[cfg(feature = "ssh")]
+        if let Some(decrypt_result) = self.ssh.values().find_map(|ssh_metadata| {
+            SshIntegration::decrypt_data_key(&ssh_metadata.config.key_id, &ssh_metadata.encrypted_data_key).transpose()
+        }) {
+            return decrypt_result.map(Some);
+        }
+
         #[cfg(feature = "aws-kms")]
         if let Some(decrypt_result) = self.kms.values().find_map(|aws_kms_metadata| {
             AwsKmsIntegration::decrypt_data_key(&aws_kms_metadata.config.key_id, &aws_kms_metadata.encrypted_data_key).transpose()
@@ -62,6 +72,8 @@ mod mock {
                 kms: MockTestUtil::mock(),
                 #[cfg(feature = "age")]
                 age: MockTestUtil::mock(),
+                #[cfg(feature = "ssh")]
+                ssh: MockTestUtil::mock(),
             }
         }
     }

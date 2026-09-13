@@ -19,6 +19,13 @@ pub use aws_kms::AwsKmsIntegration;
 #[cfg(feature = "aws-kms")]
 pub(crate) use aws_kms::*;
 
+#[cfg(feature = "ssh")]
+mod ssh;
+#[cfg(all(feature = "test-utils", feature = "ssh"))]
+pub(crate) use ssh::SshConfig;
+#[cfg(feature = "ssh")]
+pub use ssh::SshIntegration;
+
 #[cfg(feature = "test-utils")]
 mod test_utils;
 #[cfg(feature = "test-utils")]
