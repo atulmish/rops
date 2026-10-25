@@ -18,18 +18,17 @@ mod age_yaml_aes_gcm_sha2 {
     }
 }
 
-/// `sops` stores SSH recipients in the same `age` metadata field as native age
-/// recipients, so these check the very same integration.
+/// `sops` stores SSH recipients in the same `age` metadata field as native age recipients.
 #[cfg(all(feature = "ssh", feature = "yaml", feature = "aes-gcm", feature = "sha2"))]
-mod age_ssh_yaml_aes_gcm_sha2 {
+mod ssh_yaml_aes_gcm_sha2 {
     use crate::*;
 
-    age_ssh_parity_check!(example);
+    ssh_parity_check!(example);
 
     #[macro_export]
-    macro_rules! age_ssh_parity_check {
+    macro_rules! ssh_parity_check {
         ($name:tt) => {
-            parity_check!("age_ssh", AgeIntegration, $name);
+            parity_check!("age_ssh", SshIntegration, $name);
         };
     }
 }

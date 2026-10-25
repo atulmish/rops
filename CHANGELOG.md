@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- SSH keys as age recipients behind a non-default `ssh` feature. `sops`
-  compatible in that SSH recipients are stored in the `age` metadata field.
+- `ssh` integration behind a non-default `ssh` feature, with a `--ssh` CLI argument.
+  SSH public keys are age recipients and, as in `sops`, stored in the `age` metadata
+  field. Private keys are retrieved separately from age's through `ROPS_SSH`,
+  `ROPS_SSH_KEY_FILE` and the `ssh_keys` rops key file.
 - `Integration::parse_private_keys` for integrations accepting private keys
   which span multiple lines, such as PEM encoded SSH private keys.
 
